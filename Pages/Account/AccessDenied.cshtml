@@ -1,0 +1,21 @@
+@page
+@model RoomEase.Pages.Account.AccessDeniedModel
+@{
+    ViewData["Title"] = "Accès refusé";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header bg-danger text-white">
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    <p class="text-danger">Vous n'avez pas l'autorisation d'accéder à cette ressource.</p>
+                    <a asp-page="/Index" class="btn btn-primary">Retour à l'accueil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

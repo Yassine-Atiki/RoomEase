@@ -1,0 +1,82 @@
+@page
+@model RoomEase.Pages.Admin.Rooms.DeleteModel
+@{
+    ViewData["Title"] = "Supprimer la Salle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger">
+                            @Model.ErrorMessage
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Attention!</strong> Êtes-vous sûr de vouloir supprimer cette salle?
+                        </div>
+
+                        <dl class="row">
+                            <dt class="col-sm-3">Nom</dt>
+                            <dd class="col-sm-9">@Model.Room.Name</dd>
+
+                            <dt class="col-sm-3">Capacité</dt>
+                            <dd class="col-sm-9">@Model.Room.Capacity personnes</dd>
+
+                            <dt class="col-sm-3">Description</dt>
+                            <dd class="col-sm-9">@(Model.Room.Description ?? "Aucune description")</dd>
+
+                            <dt class="col-sm-3">Disponible</dt>
+                            <dd class="col-sm-9">
+                                @if (Model.Room.IsAvailable)
+                                {
+                                    <span class="badge bg-success">Oui</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Non</span>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-3">Équipements</dt>
+                            <dd class="col-sm-9">
+                                @if (Model.Room.RoomEquipments != null && Model.Room.RoomEquipments.Any())
+                                {
+                                    <ul class="list-unstyled">
+                                        @foreach (var re in Model.Room.RoomEquipments)
+                                        {
+                                            <li>@re.Equipment.Name</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Aucun équipement</span>
+                                }
+                            </dd>
+                        </dl>
+                    }
+
+                    <form method="post">
+                        <input type="hidden" asp-for="Room.Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Index" class="btn btn-secondary">Annuler</a>
+                            @if (string.IsNullOrEmpty(Model.ErrorMessage))
+                            {
+                                <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

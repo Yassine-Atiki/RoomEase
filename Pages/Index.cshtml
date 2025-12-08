@@ -1,0 +1,127 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Accueil";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bienvenue sur RoomEase</h1>
+    <p class="lead">Votre solution de gestion et de réservation de salles</p>
+    
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="mt-4">
+            <h3>Bonjour, @User.Identity.Name!</h3>
+            
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-search"></i> Rechercher une Salle</h5>
+                            <p class="card-text">Trouvez et réservez la salle parfaite pour votre réunion</p>
+                            <a asp-page="/Rooms/Index" class="btn btn-primary">Rechercher</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-calendar-check"></i> Mes Réservations</h5>
+                            <p class="card-text">Consultez et gérez vos réservations actuelles</p>
+                            <a asp-page="/Reservations/MyReservations" class="btn btn-primary">Voir mes réservations</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-bell"></i> Notifications</h5>
+                            <p class="card-text">Restez informé de l'état de vos réservations</p>
+                            <a asp-page="/Notifications/Index" class="btn btn-primary">Voir mes notifications</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="mt-4">
+                    <h4 class="text-center mb-3">Administration</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-door-open"></i> Gestion des Salles</h5>
+                                    <p class="card-text">Créer, modifier et supprimer des salles</p>
+                                    <a asp-page="/Admin/Rooms/Index" class="btn btn-outline-primary">Accéder</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-tools"></i> Gestion des Équipements</h5>
+                                    <p class="card-text">Gérer les équipements disponibles</p>
+                                    <a asp-page="/Admin/Equipment/Index" class="btn btn-outline-primary">Accéder</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-calendar-check"></i> Gestion des Réservations</h5>
+                                    <p class="card-text">Approuver ou refuser les demandes de réservation</p>
+                                    <a asp-page="/Admin/Reservations/Index" class="btn btn-outline-primary">Accéder</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="mt-5">
+            <p class="lead">Connectez-vous pour commencer à réserver des salles</p>
+            <div class="d-flex gap-3 justify-content-center">
+                <a asp-page="/Account/Login" class="btn btn-primary btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> Connexion
+                </a>
+                <a asp-page="/Account/Register" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-person-plus"></i> Inscription
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-calendar-check display-4 text-primary"></i>
+                <h5 class="card-title mt-3">Réservation Facile</h5>
+                <p class="card-text">Réservez vos salles en quelques clics</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-clock-history display-4 text-primary"></i>
+                <h5 class="card-title mt-3">Disponibilité en Temps Réel</h5>
+                <p class="card-text">Consultez la disponibilité instantanément</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-bell display-4 text-primary"></i>
+                <h5 class="card-title mt-3">Notifications</h5>
+                <p class="card-text">Recevez des alertes sur vos réservations</p>
+            </div>
+        </div>
+    </div>
+</div>

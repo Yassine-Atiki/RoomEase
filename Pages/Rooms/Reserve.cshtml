@@ -1,0 +1,96 @@
+@page
+@model RoomEase.Pages.Rooms.ReserveModel
+@{
+    ViewData["Title"] = "Réserver une Salle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2><i class="bi bi-calendar-plus"></i> @ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+                        </div>
+                    }
+
+                    <div class="alert alert-info mb-4">
+                        <h5><i class="bi bi-door-open"></i> @Model.Room.Name</h5>
+                        <p class="mb-1"><strong>Capacité:</strong> @Model.Room.Capacity personnes</p>
+                        @if (!string.IsNullOrEmpty(Model.Room.Description))
+                        {
+                            <p class="mb-1"><strong>Description:</strong> @Model.Room.Description</p>
+                        }
+                        @if (Model.Room.RoomEquipments != null && Model.Room.RoomEquipments.Any())
+                        {
+                            <p class="mb-1"><strong>Équipements:</strong></p>
+                            <ul class="mb-0">
+                                @foreach (var re in Model.Room.RoomEquipments)
+                                {
+                                    <li>@re.Equipment.Name</li>
+                                }
+                            </ul>
+                        }
+                    </div>
+
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <input type="hidden" asp-for="Reservation.RoomId" />
+
+                        <div class="mb-3">
+                            <label asp-for="Reservation.Date" class="form-label"></label>
+                            <input asp-for="Reservation.Date" class="form-control" />
+                            <span asp-validation-for="Reservation.Date" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Reservation.StartTime" class="form-label"></label>
+                                    <input asp-for="Reservation.StartTime" class="form-control" />
+                                    <span asp-validation-for="Reservation.StartTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Reservation.EndTime" class="form-label"></label>
+                                    <input asp-for="Reservation.EndTime" class="form-control" />
+                                    <span asp-validation-for="Reservation.EndTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reservation.Purpose" class="form-label"></label>
+                            <textarea asp-for="Reservation.Purpose" class="form-control" rows="3" 
+                                      placeholder="Décrivez brièvement le motif de votre réservation..."></textarea>
+                            <span asp-validation-for="Reservation.Purpose" class="text-danger"></span>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="bi bi-info-circle"></i> Votre réservation sera soumise à validation par un administrateur.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Retour à la recherche
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Confirmer la réservation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

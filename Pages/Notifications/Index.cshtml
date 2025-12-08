@@ -1,0 +1,55 @@
+@page
+@model RoomEase.Pages.Notifications.IndexModel
+@{
+    ViewData["Title"] = "Mes Notifications";
+}
+
+<div class="container mt-4">
+    <h1><i class="bi bi-bell"></i> @ViewData["Title"]</h1>
+
+    @if (!Model.Notifications.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Vous n'avez aucune notification.
+        </div>
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var notification in Model.Notifications)
+            {
+                <div class="list-group-item @(!notification.IsRead ? "list-group-item-primary" : "")">
+                    <div class="d-flex w-100 justify-content-between">
+                        <div class="flex-grow-1">
+                            @if (!notification.IsRead)
+                            {
+                                <span class="badge bg-primary me-2">Nouveau</span>
+                            }
+                            <p class="mb-1">@notification.Message</p>
+                            <small class="text-muted">
+                                <i class="bi bi-clock"></i> @notification.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </small>
+                        </div>
+                        @if (!notification.IsRead)
+                        {
+                            <div>
+                                <form method="post" asp-page-handler="MarkAsRead" asp-route-id="@notification.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-check"></i> Marquer comme lu
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="mt-3">
+            <p class="text-muted">
+                <strong>@Model.Notifications.Count(n => !n.IsRead)</strong> notification(s) non lue(s) sur 
+                <strong>@Model.Notifications.Count</strong> au total
+            </p>
+        </div>
+    }
+</div>

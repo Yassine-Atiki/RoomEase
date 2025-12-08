@@ -1,0 +1,58 @@
+@page
+@model RoomEase.Pages.Admin.Equipment.DeleteModel
+@{
+    ViewData["Title"] = "Supprimer l'Équipement";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger">
+                            @Model.ErrorMessage
+                        </div>
+
+                        @if (Model.Equipment.RoomEquipments != null && Model.Equipment.RoomEquipments.Any())
+                        {
+                            <p>Cet équipement est utilisé dans les salles suivantes :</p>
+                            <ul>
+                                @foreach (var re in Model.Equipment.RoomEquipments)
+                                {
+                                    <li>@re.Room.Name</li>
+                                }
+                            </ul>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Attention!</strong> Êtes-vous sûr de vouloir supprimer cet équipement?
+                        </div>
+
+                        <dl class="row">
+                            <dt class="col-sm-4">Nom</dt>
+                            <dd class="col-sm-8">@Model.Equipment.Name</dd>
+                        </dl>
+                    }
+
+                    <form method="post">
+                        <input type="hidden" asp-for="Equipment.Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Index" class="btn btn-secondary">Retour à la liste</a>
+                            @if (string.IsNullOrEmpty(Model.ErrorMessage))
+                            {
+                                <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
