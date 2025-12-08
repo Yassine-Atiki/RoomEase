@@ -1,0 +1,81 @@
+@page
+@model RoomEase.Pages.Admin.Rooms.EditModel
+@{
+    ViewData["Title"] = "Modifier la Salle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Room.Id" />
+                        
+                        <div class="mb-3">
+                            <label asp-for="Room.Name" class="form-label"></label>
+                            <input asp-for="Room.Name" class="form-control" />
+                            <span asp-validation-for="Room.Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Room.Capacity" class="form-label"></label>
+                            <input asp-for="Room.Capacity" class="form-control" type="number" min="1" />
+                            <span asp-validation-for="Room.Capacity" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Room.Description" class="form-label"></label>
+                            <textarea asp-for="Room.Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Room.Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input asp-for="Room.IsAvailable" class="form-check-input" />
+                                <label asp-for="Room.IsAvailable" class="form-check-label"></label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Équipements</label>
+                            @if (Model.AvailableEquipments != null && Model.AvailableEquipments.Any())
+                            {
+                                @foreach (var equipment in Model.AvailableEquipments)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" 
+                                               name="SelectedEquipmentIds" 
+                                               value="@equipment.Id" 
+                                               id="equipment_@equipment.Id"
+                                               checked="@Model.SelectedEquipmentIds.Contains(equipment.Id)" />
+                                        <label class="form-check-label" for="equipment_@equipment.Id">
+                                            @equipment.Name
+                                        </label>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted">Aucun équipement disponible.</p>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Index" class="btn btn-secondary">Annuler</a>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
