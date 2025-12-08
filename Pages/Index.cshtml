@@ -4,123 +4,213 @@
     ViewData["Title"] = "Accueil";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Bienvenue sur RoomEase</h1>
-    <p class="lead">Votre solution de gestion et de réservation de salles</p>
-    
-    @if (User.Identity.IsAuthenticated)
-    {
-        <div class="mt-4">
-            <h3>Bonjour, @User.Identity.Name!</h3>
+<!-- Hero Section -->
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="hero-section text-center fade-in">
+        <div class="container py-5">
+            <h1 class="display-3 fw-bold mb-4">
+                <i class="bi bi-building-fill"></i> Bienvenue sur RoomEase
+            </h1>
+            <p class="lead mb-5">
+                Gérez vos réservations de salles en toute simplicité avec notre plateforme moderne et intuitive
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a asp-page="/Account/Login" class="btn btn-light btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> Se Connecter
+                </a>
+                <a asp-page="/Account/Register" class="btn btn-outline-light btn-lg">
+                    <i class="bi bi-person-plus-fill"></i> Créer un Compte
+                </a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="mb-5 fade-in">
+        <div class="card bg-gradient-primary text-white shadow-lg">
+            <div class="card-body p-5 text-center">
+                <h2 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-emoji-smile-fill"></i> Bonjour, @User.Identity.Name!
+                </h2>
+                <p class="lead mb-0">
+                    Bienvenue dans votre espace de gestion de réservations
+                </p>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Quick Actions for Authenticated Users -->
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="mb-5">
+        <h3 class="mb-4">
+            <i class="bi bi-lightning-charge-fill text-primary"></i> Actions Rapides
+        </h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center fade-in">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-search display-1 text-primary"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Rechercher une Salle</h5>
+                        <p class="card-text text-muted">
+                            Trouvez rapidement la salle parfaite pour votre réunion selon vos critères
+                        </p>
+                        <a asp-page="/Rooms/Index" class="btn btn-primary w-100">
+                            <i class="bi bi-arrow-right-circle"></i> Rechercher
+                        </a>
+                    </div>
+                </div>
+            </div>
             
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-search"></i> Rechercher une Salle</h5>
-                            <p class="card-text">Trouvez et réservez la salle parfaite pour votre réunion</p>
-                            <a asp-page="/Rooms/Index" class="btn btn-primary">Rechercher</a>
+            <div class="col-md-4">
+                <div class="card h-100 text-center fade-in" style="animation-delay: 0.1s;">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-calendar-check display-1 text-success"></i>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-calendar-check"></i> Mes Réservations</h5>
-                            <p class="card-text">Consultez et gérez vos réservations actuelles</p>
-                            <a asp-page="/Reservations/MyReservations" class="btn btn-primary">Voir mes réservations</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-bell"></i> Notifications</h5>
-                            <p class="card-text">Restez informé de l'état de vos réservations</p>
-                            <a asp-page="/Notifications/Index" class="btn btn-primary">Voir mes notifications</a>
-                        </div>
+                        <h5 class="card-title fw-bold">Mes Réservations</h5>
+                        <p class="card-text text-muted">
+                            Consultez et gérez toutes vos réservations en cours et à venir
+                        </p>
+                        <a asp-page="/Reservations/MyReservations" class="btn btn-success w-100">
+                            <i class="bi bi-arrow-right-circle"></i> Voir mes réservations
+                        </a>
                     </div>
                 </div>
             </div>
-
-            @if (User.IsInRole("Admin"))
-            {
-                <div class="mt-4">
-                    <h4 class="text-center mb-3">Administration</h4>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card h-100 border-primary">
-                                <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-door-open"></i> Gestion des Salles</h5>
-                                    <p class="card-text">Créer, modifier et supprimer des salles</p>
-                                    <a asp-page="/Admin/Rooms/Index" class="btn btn-outline-primary">Accéder</a>
-                                </div>
-                            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center fade-in" style="animation-delay: 0.2s;">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-bell display-1 text-warning"></i>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card h-100 border-primary">
-                                <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-tools"></i> Gestion des Équipements</h5>
-                                    <p class="card-text">Gérer les équipements disponibles</p>
-                                    <a asp-page="/Admin/Equipment/Index" class="btn btn-outline-primary">Accéder</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card h-100 border-primary">
-                                <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-calendar-check"></i> Gestion des Réservations</h5>
-                                    <p class="card-text">Approuver ou refuser les demandes de réservation</p>
-                                    <a asp-page="/Admin/Reservations/Index" class="btn btn-outline-primary">Accéder</a>
-                                </div>
-                            </div>
-                        </div>
+                        <h5 class="card-title fw-bold">Notifications</h5>
+                        <p class="card-text text-muted">
+                            Restez informé en temps réel de l'état de vos réservations
+                        </p>
+                        <a asp-page="/Notifications/Index" class="btn btn-warning w-100">
+                            <i class="bi bi-arrow-right-circle"></i> Voir les notifications
+                        </a>
                     </div>
                 </div>
-            }
+            </div>
         </div>
-    }
-    else
+    </div>
+
+    <!-- Admin Section -->
+    @if (User.IsInRole("Admin"))
     {
-        <div class="mt-5">
-            <p class="lead">Connectez-vous pour commencer à réserver des salles</p>
-            <div class="d-flex gap-3 justify-content-center">
-                <a asp-page="/Account/Login" class="btn btn-primary btn-lg">
-                    <i class="bi bi-box-arrow-in-right"></i> Connexion
-                </a>
-                <a asp-page="/Account/Register" class="btn btn-outline-primary btn-lg">
-                    <i class="bi bi-person-plus"></i> Inscription
-                </a>
+        <div class="mb-5">
+            <h3 class="mb-4">
+                <i class="bi bi-shield-fill-check text-primary"></i> Administration
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-primary fade-in">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-door-open display-3 text-primary"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Gestion des Salles</h5>
+                            <p class="card-text text-muted">
+                                Créer, modifier et gérer toutes les salles disponibles
+                            </p>
+                            <a asp-page="/Admin/Rooms/Index" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-gear-fill"></i> Gérer les salles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-primary fade-in" style="animation-delay: 0.1s;">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-tools display-3 text-primary"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Gestion des Équipements</h5>
+                            <p class="card-text text-muted">
+                                Gérer tous les équipements disponibles dans les salles
+                            </p>
+                            <a asp-page="/Admin/Equipment/Index" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-gear-fill"></i> Gérer les équipements
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-primary fade-in" style="animation-delay: 0.2s;">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-calendar-check display-3 text-primary"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Validation des Réservations</h5>
+                            <p class="card-text text-muted">
+                                Approuver ou refuser les demandes de réservation
+                            </p>
+                            <a asp-page="/Admin/Reservations/Index" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-gear-fill"></i> Gérer les réservations
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     }
-</div>
+}
 
-<div class="row mt-5">
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="bi bi-calendar-check display-4 text-primary"></i>
-                <h5 class="card-title mt-3">Réservation Facile</h5>
-                <p class="card-text">Réservez vos salles en quelques clics</p>
+<!-- Features Section -->
+<div class="mt-5 pt-4">
+    <h3 class="text-center mb-5">
+        <i class="bi bi-star-fill text-primary"></i> Fonctionnalités Principales
+    </h3>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center h-100 fade-in">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-lightning-charge-fill display-2 text-primary"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Réservation Instantanée</h5>
+                    <p class="card-text text-muted">
+                        Réservez vos salles en quelques clics avec notre interface intuitive et rapide
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="bi bi-clock-history display-4 text-primary"></i>
-                <h5 class="card-title mt-3">Disponibilité en Temps Réel</h5>
-                <p class="card-text">Consultez la disponibilité instantanément</p>
+        
+        <div class="col-md-4">
+            <div class="card text-center h-100 fade-in" style="animation-delay: 0.1s;">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-clock-history display-2 text-success"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Disponibilité en Temps Réel</h5>
+                    <p class="card-text text-muted">
+                        Consultez instantanément la disponibilité de toutes les salles
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="bi bi-bell display-4 text-primary"></i>
-                <h5 class="card-title mt-3">Notifications</h5>
-                <p class="card-text">Recevez des alertes sur vos réservations</p>
+        
+        <div class="col-md-4">
+            <div class="card text-center h-100 fade-in" style="animation-delay: 0.2s;">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-bell-fill display-2 text-warning"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Notifications Intelligentes</h5>
+                    <p class="card-text text-muted">
+                        Recevez des alertes pour toutes vos réservations et leurs validations
+                    </p>
+                </div>
             </div>
         </div>
     </div>

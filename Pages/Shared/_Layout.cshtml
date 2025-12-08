@@ -1,96 +1,115 @@
 ﻿<!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" style="height: 100%;">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RoomEase</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RoomEase.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+<body style="min-height: 100vh; display: flex; flex-direction: column; margin: 0;">
+    <header style="flex-shrink: 0;">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">
                     <i class="bi bi-building"></i> RoomEase
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" 
+                        aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-page="/Index">
-                                <i class="bi bi-house"></i> Accueil
+                            <a class="nav-link" asp-page="/Index">
+                                <i class="bi bi-house-door"></i> Accueil
                             </a>
                         </li>
+                        
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-page="/Rooms/Index">
-                                    <i class="bi bi-search"></i> Rechercher une Salle
+                                <a class="nav-link" asp-page="/Rooms/Index">
+                                    <i class="bi bi-search"></i> Rechercher
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-page="/Reservations/MyReservations">
+                                <a class="nav-link" asp-page="/Reservations/MyReservations">
                                     <i class="bi bi-calendar-check"></i> Mes Réservations
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-page="/Notifications/Index">
+                                <a class="nav-link" asp-page="/Notifications/Index">
                                     <i class="bi bi-bell"></i> Notifications
                                 </a>
                             </li>
+                            
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-white" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-gear"></i> Administration
+                                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" 
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-gear-fill"></i> Administration
                                     </a>
-                                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                                        <li><a class="dropdown-item" asp-page="/Admin/Rooms/Index">
-                                            <i class="bi bi-door-open"></i> Gestion des Salles
-                                        </a></li>
-                                        <li><a class="dropdown-item" asp-page="/Admin/Equipment/Index">
-                                            <i class="bi bi-tools"></i> Gestion des Équipements
-                                        </a></li>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/Admin/Rooms/Index">
+                                                <i class="bi bi-door-open-fill"></i> Gestion des Salles
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/Admin/Equipment/Index">
+                                                <i class="bi bi-tools"></i> Gestion des Équipements
+                                            </a>
+                                        </li>
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-page="/Admin/Reservations/Index">
-                                            <i class="bi bi-calendar-check"></i> Gestion des Réservations
-                                        </a></li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/Admin/Reservations/Index">
+                                                <i class="bi bi-calendar-check-fill"></i> Gestion des Réservations
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             }
-                        }
-                    </ul>
-                    <ul class="navbar-nav">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <span class="nav-link text-white">
-                                    <i class="bi bi-person-circle"></i> Bonjour, @User.Identity.Name
-                                </span>
-                            </li>
-                            <li class="nav-item">
-                                <form method="post" asp-page="/Account/Logout" class="d-inline">
-                                    <button type="submit" class="btn btn-link nav-link text-white">
-                                        <i class="bi bi-box-arrow-right"></i> Déconnexion
-                                    </button>
-                                </form>
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i> @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <form method="post" asp-page="/Account/Logout" class="d-inline w-100">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-box-arrow-right"></i> Déconnexion
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-page="/Account/Login">
+                                <a class="nav-link" asp-page="/Account/Login">
                                     <i class="bi bi-box-arrow-in-right"></i> Connexion
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-page="/Account/Register">
+                                <a asp-page="/Account/Register" class="btn btn-primary btn-sm ms-2">
                                     <i class="bi bi-person-plus"></i> Inscription
                                 </a>
                             </li>
@@ -100,18 +119,37 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <main style="flex: 1 0 auto;">
         <div class="container">
-            &copy; 2025 - RoomEase - Système de Réservation de Salles
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="footer" style="flex-shrink: 0;">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div class="mb-2 mb-md-0">
+                    <span>&copy; 2025 RoomEase</span>
+                    <span class="mx-2">|</span>
+                    <span>Système de Réservation de Salles</span>
+                </div>
+                <div>
+                    <a href="#" class="text-white text-decoration-none me-3">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <a href="#" class="text-white text-decoration-none me-3">
+                        <i class="bi bi-envelope-fill"></i>
+                    </a>
+                    <a href="#" class="text-white text-decoration-none">
+                        <i class="bi bi-info-circle-fill"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
