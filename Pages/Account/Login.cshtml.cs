@@ -9,11 +9,16 @@ namespace RoomEase.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(
+            SignInManager<AppUser> signInManager,
+            UserManager<AppUser> userManager,
+            ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -41,8 +46,21 @@ namespace RoomEase.Pages.Account
 
             if (ModelState.IsValid)
             {
+                // Determine if input is email or username
+                string userName = Input.EmailOrUserName;
+                
+                // If input looks like an email, find the user by email first
+                if (Input.EmailOrUserName.Contains("@"))
+                {
+                    var userByEmail = await _userManager.FindByEmailAsync(Input.EmailOrUserName);
+                    if (userByEmail != null)
+                    {
+                        userName = userByEmail.UserName;
+                    }
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(
-                    Input.Email, 
+                    userName, 
                     Input.Password, 
                     Input.RememberMe, 
                     lockoutOnFailure: false);

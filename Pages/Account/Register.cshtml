@@ -13,35 +13,42 @@
                 </div>
                 <div class="card-body">
                     <form method="post">
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
                         
                         <div class="mb-3">
+                            <label asp-for="Input.UserName" class="form-label"></label>
+                            <input asp-for="Input.UserName" class="form-control" autocomplete="username" placeholder="ex: john_doe" />
+                            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                            <small class="form-text text-muted">Lettres, chiffres et underscores uniquement (3-50 caractères)</small>
+                        </div>
+
+                        <div class="mb-3">
                             <label asp-for="Input.Email" class="form-label"></label>
-                            <input asp-for="Input.Email" class="form-control" />
+                            <input asp-for="Input.Email" class="form-control" autocomplete="email" />
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Input.FullName" class="form-label"></label>
-                            <input asp-for="Input.FullName" class="form-control" />
+                            <input asp-for="Input.FullName" class="form-control" autocomplete="name" />
                             <span asp-validation-for="Input.FullName" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Input.Department" class="form-label"></label>
-                            <input asp-for="Input.Department" class="form-control" />
+                            <input asp-for="Input.Department" class="form-control" autocomplete="organization" />
                             <span asp-validation-for="Input.Department" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Input.Password" class="form-label"></label>
-                            <input asp-for="Input.Password" class="form-control" />
+                            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" />
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Input.ConfirmPassword" class="form-label"></label>
-                            <input asp-for="Input.ConfirmPassword" class="form-control" />
+                            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" />
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
 

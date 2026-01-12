@@ -1,0 +1,197 @@
+@startuml Class_Diagram_RoomEase
+' Configuration du style
+skinparam handwritten false
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+' Titre
+title Diagramme de Classes - RoomEase\nSystème de Réservation de Salles
+
+' Classe AppUser (hérite de IdentityUser)
+class AppUser {
+    ' Propriétés héritées d'IdentityUser
+    + Id : string <<PK>>
+    + UserName : string
+    + Email : string
+    + PasswordHash : string
+    + SecurityStamp : string
+    
+    ' Propriétés personnalisées
+    + FullName : string
+    + Department : string?
+    
+    ' Relations de navigation
+    + Reservations : ICollection<Reservation>
+    + Notifications : ICollection<Notification>
+}
+
+' Classe Room
+class Room {
+    + Id : int <<PK>>
+    + Name : string
+    + Capacity : int
+    + Description : string?
+    + IsAvailable : bool
+    
+    ' Relations de navigation
+    + RoomEquipments : ICollection<RoomEquipment>
+    + Reservations : ICollection<Reservation>
+}
+
+' Classe Equipment
+class Equipment {
+    + Id : int <<PK>>
+    + Name : string
+    
+    ' Relations de navigation
+    + RoomEquipments : ICollection<RoomEquipment>
+}
+
+' Classe RoomEquipment (Table de jointure Many-to-Many)
+class RoomEquipment <<JoinTable>> {
+    + RoomId : int <<PK, FK>>
+    + EquipmentId : int <<PK, FK>>
+    
+    ' Relations de navigation
+    + Room : Room
+    + Equipment : Equipment
+}
+
+' Classe Reservation
+class Reservation {
+    + Id : int <<PK>>
+    + StartTime : DateTime
+    + EndTime : DateTime
+    + Purpose : string?
+    + Status : ReservationStatus
+    + UserId : string <<FK>>
+    + RoomId : int <<FK>>
+    
+    ' Relations de navigation
+    + User : AppUser
+    + Room : Room
+}
+
+' Enum ReservationStatus
+enum ReservationStatus {
+    Pending
+    Approved
+    Rejected
+    Cancelled
+}
+
+' Classe Notification
+class Notification {
+    + Id : int <<PK>>
+    + Message : string
+    + CreatedAt : DateTime
+    + IsRead : bool
+    + UserId : string <<FK>>
+    
+    ' Relations de navigation
+    + User : AppUser
+}
+
+' ============================================
+' RELATIONS
+' ============================================
+
+' Relation One-to-Many: AppUser -> Reservation
+AppUser "1" -- "0..*" Reservation : possède >
+note on link
+  Un utilisateur peut
+  avoir plusieurs réservations
+end note
+
+' Relation One-to-Many: Room -> Reservation
+Room "1" -- "0..*" Reservation : est réservée dans >
+note on link
+  Une salle peut être
+  réservée plusieurs fois
+end note
+
+' Relation Many-to-Many: Room <-> Equipment (via RoomEquipment)
+Room "1" -- "0..*" RoomEquipment : contient >
+Equipment "1" -- "0..*" RoomEquipment : est dans >
+
+note top of RoomEquipment
+  Table de jointure avec clé composite
+  (RoomId, EquipmentId)
+  pour relation Many-to-Many
+end note
+
+' Relation One-to-Many: AppUser -> Notification
+AppUser "1" -- "0..*" Notification : reçoit >
+note on link
+  Un utilisateur peut
+  recevoir plusieurs notifications
+end note
+
+' Relation: Reservation -> ReservationStatus (Composition)
+Reservation *-- ReservationStatus : a un statut
+
+' Notes supplémentaires
+note right of AppUser
+  Hérite de IdentityUser
+  (ASP.NET Core Identity)
+  
+  Propriétés héritées additionnelles:
+  - PhoneNumber
+  - EmailConfirmed
+  - LockoutEnabled
+  - etc.
+end note
+
+note right of Reservation
+  Logique de validation:
+  - Vérification des conflits
+    (chevauchement de créneaux)
+  - StartTime < EndTime
+  - Status initial: Pending
+end note
+
+note bottom of Room
+  IsAvailable:
+  - true: salle disponible
+  - false: salle hors service
+    ou en maintenance
+end note
+
+' Services (optionnel, pour contexte)
+package "Services" <<Rectangle>> {
+    interface INotificationService {
+        + CreateNotificationAsync(userId, message)
+        + GetUserNotificationsAsync(userId)
+        + MarkAsReadAsync(notificationId)
+        + GetUnreadCountAsync(userId)
+    }
+    
+    class NotificationService {
+        - _context : ApplicationDbContexte
+        + CreateNotificationAsync(userId, message)
+        + GetUserNotificationsAsync(userId)
+        + MarkAsReadAsync(notificationId)
+        + GetUnreadCountAsync(userId)
+    }
+    
+    class ApplicationDbContexte {
+        + Rooms : DbSet<Room>
+        + Equipments : DbSet<Equipment>
+        + RoomEquipments : DbSet<RoomEquipment>
+        + Reservations : DbSet<Reservation>
+        + Notifications : DbSet<Notification>
+        + OnModelCreating(modelBuilder)
+    }
+}
+
+' Relations avec les services
+NotificationService ..|> INotificationService : implements
+NotificationService --> ApplicationDbContexte : utilise
+ApplicationDbContexte --> AppUser : gère
+ApplicationDbContexte --> Room : gère
+ApplicationDbContexte --> Equipment : gère
+ApplicationDbContexte --> Reservation : gère
+ApplicationDbContexte --> Notification : gère
+
+@enduml

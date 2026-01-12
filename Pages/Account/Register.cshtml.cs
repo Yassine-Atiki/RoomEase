@@ -38,9 +38,17 @@ namespace RoomEase.Pages.Account
             
             if (ModelState.IsValid)
             {
+                // Check if username already exists
+                var existingUser = await _userManager.FindByNameAsync(Input.UserName);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError(string.Empty, "Ce nom d'utilisateur est déjà pris.");
+                    return Page();
+                }
+
                 var user = new AppUser
                 {
-                    UserName = Input.Email,
+                    UserName = Input.UserName,
                     Email = Input.Email,
                     FullName = Input.FullName,
                     Department = Input.Department

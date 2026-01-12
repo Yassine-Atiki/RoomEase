@@ -1,0 +1,99 @@
+@startuml UseCase_RoomEase
+' Configuration du style
+skinparam handwritten false
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+' Titre
+title Diagramme de Cas d'Utilisation - RoomEase\nSystème de Réservation de Salles
+
+' Définition des acteurs
+actor "Utilisateur\nAuthentifié" as User
+actor "Administrateur" as Admin
+
+' Héritage
+Admin -up-|> User
+
+' Package système
+package "Système RoomEase" {
+    
+    ' Cas d'utilisation communs (Utilisateur Authentifié)
+    usecase "S'authentifier" as UC_Auth
+    usecase "Consulter les salles\ndisponibles" as UC_ViewRooms
+    usecase "Rechercher une salle\n(date, capacité, équipements)" as UC_SearchRooms
+    usecase "Réserver une salle" as UC_Reserve
+    usecase "Gérer ses réservations\n(consulter, annuler)" as UC_ManageReservations
+    usecase "Recevoir des notifications" as UC_Notifications
+    usecase "Consulter son profil" as UC_ViewProfile
+    
+    ' Cas d'utilisation Admin uniquement
+    usecase "Gérer les salles\n(CRUD)" as UC_ManageRooms
+    usecase "Créer une salle" as UC_CreateRoom
+    usecase "Modifier une salle" as UC_EditRoom
+    usecase "Supprimer une salle" as UC_DeleteRoom
+    usecase "Consulter les détails\nd'une salle" as UC_ViewRoomDetails
+    
+    usecase "Gérer les équipements\n(CRUD)" as UC_ManageEquipments
+    usecase "Créer un équipement" as UC_CreateEquipment
+    usecase "Modifier un équipement" as UC_EditEquipment
+    usecase "Supprimer un équipement" as UC_DeleteEquipment
+    
+    usecase "Valider/Refuser\nune réservation" as UC_ValidateReservation
+    usecase "Consulter le planning\nglobal" as UC_ViewGlobalPlanning
+    
+    ' Cas d'utilisation système
+    usecase "Vérifier les conflits\nde réservation" as UC_CheckConflicts
+    usecase "Envoyer une notification" as UC_SendNotification
+}
+
+' Relations Utilisateur
+User --> UC_Auth
+User --> UC_ViewRooms
+User --> UC_SearchRooms
+User --> UC_Reserve
+User --> UC_ManageReservations
+User --> UC_Notifications
+User --> UC_ViewProfile
+
+' Relations Admin
+Admin --> UC_ManageRooms
+Admin --> UC_ManageEquipments
+Admin --> UC_ValidateReservation
+Admin --> UC_ViewGlobalPlanning
+
+' Relations include (dépendances)
+UC_Reserve ..> UC_Auth : <<include>>
+UC_ManageReservations ..> UC_Auth : <<include>>
+UC_Reserve ..> UC_CheckConflicts : <<include>>
+UC_ValidateReservation ..> UC_SendNotification : <<include>>
+
+' Relations extend (extensions)
+UC_ManageRooms ..> UC_CreateRoom : <<extend>>
+UC_ManageRooms ..> UC_EditRoom : <<extend>>
+UC_ManageRooms ..> UC_DeleteRoom : <<extend>>
+UC_ManageRooms ..> UC_ViewRoomDetails : <<extend>>
+
+UC_ManageEquipments ..> UC_CreateEquipment : <<extend>>
+UC_ManageEquipments ..> UC_EditEquipment : <<extend>>
+UC_ManageEquipments ..> UC_DeleteEquipment : <<extend>>
+
+' Notes explicatives
+note right of UC_Reserve
+  Statut initial: "Pending"
+  (En attente de validation admin)
+end note
+
+note right of UC_ValidateReservation
+  Actions possibles:
+  - Approuver ? Status: "Approved"
+  - Refuser ? Status: "Rejected"
+end note
+
+note bottom of UC_CheckConflicts
+  Vérifie qu'il n'existe pas
+  de réservation qui chevauche
+  le créneau demandé
+end note
+
+@enduml

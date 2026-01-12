@@ -32,9 +32,10 @@ namespace RoomEase.Services
             
             if (adminUser == null)
             {
+                // Create new admin user
                 var admin = new AppUser
                 {
-                    UserName = adminEmail,
+                    UserName = "admin",
                     Email = adminEmail,
                     FullName = "Administrateur RoomEase",
                     Department = "Administration",
@@ -45,6 +46,22 @@ namespace RoomEase.Services
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(admin, "Admin");
+                }
+            }
+            else
+            {
+                // Update existing admin user's username if it's still the email
+                if (adminUser.UserName == adminEmail)
+                {
+                    adminUser.UserName = "admin";
+                    adminUser.NormalizedUserName = "ADMIN";
+                    await userManager.UpdateAsync(adminUser);
+                }
+                
+                // Ensure admin role is assigned
+                if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+                {
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
             }
 

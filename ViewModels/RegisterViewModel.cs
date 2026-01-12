@@ -4,6 +4,12 @@ namespace RoomEase.ViewModels
 {
     public class RegisterViewModel
     {
+        [Required(ErrorMessage = "Le nom d'utilisateur est requis")]
+        [StringLength(50, ErrorMessage = "Le nom d'utilisateur doit contenir entre {2} et {1} caractères", MinimumLength = 3)]
+        [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Le nom d'utilisateur ne peut contenir que des lettres, chiffres et underscores")]
+        [Display(Name = "Nom d'utilisateur")]
+        public string UserName { get; set; }
+
         [Required(ErrorMessage = "L'adresse e-mail est requise")]
         [EmailAddress(ErrorMessage = "Format d'e-mail invalide")]
         [Display(Name = "Adresse e-mail")]

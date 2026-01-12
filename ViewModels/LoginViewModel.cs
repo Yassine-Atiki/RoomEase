@@ -4,10 +4,9 @@ namespace RoomEase.ViewModels
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "L'adresse e-mail est requise")]
-        [EmailAddress(ErrorMessage = "Format d'e-mail invalide")]
-        [Display(Name = "Adresse e-mail")]
-        public string Email { get; set; }
+        [Required(ErrorMessage = "L'identifiant est requis")]
+        [Display(Name = "Email ou nom d'utilisateur")]
+        public string EmailOrUserName { get; set; }
 
         [Required(ErrorMessage = "Le mot de passe est requis")]
         [DataType(DataType.Password)]
